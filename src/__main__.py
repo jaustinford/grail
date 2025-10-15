@@ -174,19 +174,19 @@ def main():
     iterate over 'backup_targets'.
     """
 
+    if os.environ.get("BACKUP_MODE") == "check":
+        LOGGER.info("Running in check mode.")
+
     with open(BACKUPS_FILE, "r", encoding="utf-8") as backups_opened:
         backups_read = backups_opened.read()
         backups_json = json.loads(backups_read)
 
     for backup_json in backups_json["backups"]:
         if backup_json["name"] == os.environ.get("BACKUP_OBJECT"):
+            LOGGER.info("Processing backup : %s", backup_json["name"])
+
             backup_targets = backup_json["targets"]
             break
-
-    if os.environ.get("BACKUP_MODE") == "check":
-        LOGGER.info("Running in check mode.")
-
-    LOGGER.info("Processing backup : %s", backup_json["name"])
 
     for backup_target in backup_targets:
         process_backup(backup_target)
