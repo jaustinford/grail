@@ -27,7 +27,7 @@ def process_backup(backup_target: str):
     backup_target_dst_fqdn = "/dst-backup-path/" + backup_target
 
     if "*" in backup_target_src_fqdn:
-        backup_target_fqdns = resolve.wildcards(backup_target_src_fqdn)
+        backup_target_fqdns = resolve.manage_wildcards(backup_target_src_fqdn)
 
     else:
         backup_target_fqdns = [
@@ -39,13 +39,13 @@ def process_backup(backup_target: str):
 
     for backup_target_fqdn in backup_target_fqdns:
         if os.path.isfile(backup_target_fqdn[0]):
-            clone.file(
+            clone.manage_file(
                 backup_target_fqdn[0],
                 backup_target_fqdn[1]
             )
 
         elif os.path.isdir(backup_target_fqdn[0]):
-            resolve.dirs(backup_target_fqdn[0])
+            resolve.manage_dirs(backup_target_fqdn[0])
 
 def main():
     """

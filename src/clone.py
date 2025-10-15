@@ -17,7 +17,7 @@ LARGE_BINARY_EXTS = [
 
 LOGGER = logs.logging.getLogger(__name__)
 
-def dir(src_dir: str, dst_dir: str):
+def manage_dir(src_dir: str, dst_dir: str):
     """
     Copy directories and preserve
     metadata elements.
@@ -39,7 +39,7 @@ def dir(src_dir: str, dst_dir: str):
     else:
         LOGGER.info("Confirmed dir : %s", dst_relative)
 
-def file(src_file: str, dst_file: str):
+def manage_file(src_file: str, dst_file: str):
     """
     Copy files and preserve
     metadata elements.
