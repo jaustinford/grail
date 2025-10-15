@@ -3,12 +3,12 @@
     {
         "name": "test",
         "targets": [
-            "ansible",
+            "ansible/roles/elise.con*",
             "env"
         ]
     },
     {
-      "name": "raid-vol-1",
+      "name": "raidvol-1",
       "targets": [
         "deluge",
         "documents",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "name": "raid-vol-2",
+      "name": "raidvol-2",
       "targets": [
         "video/plex_libraries/tv-documentaries",
         "video/plex_libraries/tv-reality",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "raid-vol-3",
+      "name": "raidvol-3",
       "targets": [
         "video/plex_libraries/tv/L*",
         "video/plex_libraries/tv/M*",
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "name": "lab-vol",
+      "name": "labvol",
       "targets": [
         "deluge",
         "elasticsearch",
