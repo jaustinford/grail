@@ -1,18 +1,11 @@
 {
   "backups": [
     {
-        "name": "test",
-        "targets": [
-            "ansible/roles/elise.con*",
-            "env"
-        ]
-    },
-    {
       "name": "raidvol-1",
       "targets": [
         "deluge",
         "documents",
-        "elysianskies",
+        "lab",
         "games",
         "hacker",
         "music",

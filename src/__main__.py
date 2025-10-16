@@ -2,6 +2,7 @@
 Copy all files and directories in
 /src-backup-path to /dst-backup-path.
 """
+
 import os
 import json
 
@@ -53,8 +54,7 @@ def main():
     iterate over 'backup_targets'.
     """
 
-    if os.environ.get("BACKUP_MODE") == "check":
-        LOGGER.info("Running in check mode.")
+    LOGGER.info("Selected Backup Mode : %s", os.environ.get("BACKUP_MODE"))
 
     with open(BACKUPS_FILE, "r", encoding="utf-8") as backups_opened:
         backups_read = backups_opened.read()

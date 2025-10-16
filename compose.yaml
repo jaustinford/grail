@@ -1,0 +1,46 @@
+---
+services:
+
+  ############################################################
+  # backup
+  ############################################################
+
+  backup:
+    image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
+    entrypoint: python src
+    profiles:
+      - backup
+
+    environment:
+      - TZ=America/Denver
+      - BACKUP_OBJECT=${BACKUP_OBJECT}
+      - BACKUP_MODE=${BACKUP_MODE}
+
+    volumes:
+      - type: volume
+        source: raid_vol
+        target: /src-backup-path
+        read_only: false
+
+      - type: bind
+        source: ${BACKUP_DST_PATH}
+        target: /dst-backup-path
+        read_only: false
+
+    networks:
+      - grail
+
+###########################################################
+# resources
+###########################################################
+
+volumes:
+  raid_vol:
+    driver_opts:
+      type: cifs
+      o: username=${RAID_VOL_USERNAME},password=${RAID_VOL_PASSWORD},uid=${LOCAL_USER_UID},gid=${LOCAL_USER_UID},iocharset=utf8
+      device: //${RAID_VOL_HOST}/${RAID_VOL_SHARE}
+
+networks:
+  grail:
+    name: grail
