@@ -38,13 +38,13 @@
         "video/plex_libraries/tv/H*",
         "video/plex_libraries/tv/I*",
         "video/plex_libraries/tv/J*",
-        "video/plex_libraries/tv/K*"
+        "video/plex_libraries/tv/K*",
+        "video/plex_libraries/tv/L*"
       ]
     },
     {
       "name": "raidvol-3",
       "targets": [
-        "video/plex_libraries/tv/L*",
         "video/plex_libraries/tv/M*",
         "video/plex_libraries/tv/N*",
         "video/plex_libraries/tv/O*",

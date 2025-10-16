@@ -20,7 +20,7 @@ def manage_wildcards(src_fqdn: str):
     src_base   = os.path.basename(src_fqdn).replace("*", "")
 
     for src_parent_dir in os.listdir(src_parent):
-        if src_base in src_parent_dir:
+        if src_parent_dir.startswith(src_base):
             src_parent_dir_fqdn = src_parent + "/" + src_parent_dir
 
             matched_files.append(
