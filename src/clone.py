@@ -59,6 +59,7 @@ def manage_file(src_file: str, dst_file: str):
         for large_binary_ext in LARGE_BINARY_EXTS:
             if src_file.endswith("." + large_binary_ext):
                 should_compare = False
+                break
 
         if should_compare:
             if not filecmp.cmp(src_file, dst_file):
