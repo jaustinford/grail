@@ -1,4 +1,6 @@
 """
+Open config files and assign as
+project variable constants.
 """
 
 import os
