@@ -4,17 +4,11 @@ Copy all files and directories in
 """
 
 import os
-import json
 
+import constants
 import logs
 import clone
 import resolve
-
-FILE_PATH       = os.path.abspath(__file__)
-SRC_DIRNAME     = os.path.dirname(FILE_PATH)
-PROJECT_DIRNAME = os.path.dirname(SRC_DIRNAME)
-CONF_DIRNAME    = os.path.join(PROJECT_DIRNAME, "conf")
-BACKUPS_FILE    = os.path.join(CONF_DIRNAME, "backups.json")
 
 LOGGER = logs.logging.getLogger(__name__)
 
@@ -73,15 +67,11 @@ def main():
     iterate over 'backup_targets'.
     """
 
-    with open(BACKUPS_FILE, "r", encoding="utf-8") as backups_opened:
-        backups_read = backups_opened.read()
-        backups_json = json.loads(backups_read)
+    for backup_object in constants.CONFIG_OBJECTS:
+        if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
+            LOGGER.info("Processing backup : %s", backup_object["name"])
 
-    for backup_json in backups_json["backups"]:
-        if backup_json["name"] == os.environ.get("BACKUP_OBJECT"):
-            LOGGER.info("Processing backup : %s", backup_json["name"])
-
-            backup_targets = backup_json["targets"]
+            backup_targets = backup_object["targets"]
             break
 
     for backup_target in backup_targets:

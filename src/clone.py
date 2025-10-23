@@ -8,12 +8,8 @@ import re
 import shutil
 import filecmp
 
+import constants
 import logs
-
-LARGE_BINARY_EXTS = [
-    "avi", "m4v", "mkv", "mp3",
-    "mp4", "mpg", "wav", "webm"
-]
 
 LOGGER = logs.logging.getLogger(__name__)
 
@@ -25,26 +21,26 @@ def diff_file(src_file: str, dst_file: str, dst_relative: str, should_copy: bool
 
     should_compare = True
 
-    for large_binary_ext in LARGE_BINARY_EXTS:
-        if src_file.endswith("." + large_binary_ext):
+    for non_checksum_ext in constants.CONFIG_NON_CHECKSUM_EXTS:
+        if src_file.endswith("." + non_checksum_ext):
             should_compare = False
             break
 
     if should_compare:
         if not filecmp.cmp(src_file, dst_file):
-            LOGGER.info("Updating standard file : %s", dst_relative)
+            LOGGER.info("Updating checksum of file : %s", dst_relative)
             should_copy = True
 
         else:
-            LOGGER.info("Confirmed standard file : %s", dst_relative)
+            LOGGER.info("Confirmed checksum of file : %s", dst_relative)
 
     else:
         if os.path.getsize(src_file) != os.path.getsize(dst_file):
-            LOGGER.info("Updating large binary file : %s", dst_relative)
+            LOGGER.info("Updating size of file : %s", dst_relative)
             should_copy = True
 
         else:
-            LOGGER.info("Confirmed large binary file : %s", dst_relative)
+            LOGGER.info("Confirmed size of file : %s", dst_relative)
 
     return should_copy
 
