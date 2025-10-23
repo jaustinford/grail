@@ -18,17 +18,29 @@ BACKUPS_FILE    = os.path.join(CONF_DIRNAME, "backups.json")
 
 LOGGER = logs.logging.getLogger(__name__)
 
-def process_backup(backup_target: str):
+def process_backup(backup_direction: str, backup_target: str):
     """
     Direct the flow along whether
     'backup_target_src_fqdn' has a wildcard.
     """
 
-    backup_target_src_fqdn = "/src-backup-path/" + backup_target
-    backup_target_dst_fqdn = "/dst-backup-path/" + backup_target
+    if backup_direction == "forward":
+        src_root = "/src-backup-path/"
+        dst_root = "/dst-backup-path/"
+
+    elif backup_direction == "reverse":
+        src_root = "/dst-backup-path/"
+        dst_root = "/src-backup-path/"
+
+    backup_target_src_fqdn = src_root + backup_target
+    backup_target_dst_fqdn = dst_root + backup_target
 
     if "*" in backup_target_src_fqdn:
-        backup_target_fqdns = resolve.manage_wildcards(backup_target_src_fqdn)
+        backup_target_fqdns = resolve.manage_wildcards(
+            src_root,
+            dst_root,
+            backup_target_src_fqdn
+        )
 
     else:
         backup_target_fqdns = [
@@ -41,20 +53,25 @@ def process_backup(backup_target: str):
     for backup_target_fqdn in backup_target_fqdns:
         if os.path.isfile(backup_target_fqdn[0]):
             clone.manage_file(
+                backup_direction,
+                dst_root,
                 backup_target_fqdn[0],
                 backup_target_fqdn[1]
             )
 
         elif os.path.isdir(backup_target_fqdn[0]):
-            resolve.manage_dirs(backup_target_fqdn[0])
+            resolve.manage_dirs(
+                backup_direction,
+                src_root,
+                dst_root,
+                backup_target_fqdn[0]
+            )
 
 def main():
     """
     Open config and assign elements and
     iterate over 'backup_targets'.
     """
-
-    LOGGER.info("Selected Backup Mode : %s", os.environ.get("BACKUP_MODE"))
 
     with open(BACKUPS_FILE, "r", encoding="utf-8") as backups_opened:
         backups_read = backups_opened.read()
@@ -68,7 +85,8 @@ def main():
             break
 
     for backup_target in backup_targets:
-        process_backup(backup_target)
+        process_backup("forward", backup_target)
+        process_backup("reverse", backup_target)
 
 if __name__ == "__main__":
     main()
