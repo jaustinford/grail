@@ -36,56 +36,56 @@
 
       - name: raidvol-1
         targets:
-          - deluge
-          - documents
-          - lab
-          - games
-          - hacker
-          - music
-          - pictures
-          - software
-          - video/educational
-          - video/youtube
-          - video/plex_libraries/movies*
-          - video/plex_libraries/tv-deutsch
-          - video/plex_libraries/tv-espanol
-          - video/plex_libraries/tv-private
+          - black
+          - blue/documents
+          - blue/music
+          - blue/pictures
+          - blue/video/educational
+          - blue/video/youtube
+          - red/movies*
+          - red/tv-deutsch
+          - red/tv-espanol
+          - red/tv-private
+          - white/backups
+          - white/games
+          - white/hacker
+          - white/software
 
       - name: raidvol-2
         targets:
-          - video/plex_libraries/tv-documentaries
-          - video/plex_libraries/tv-reality
-          - video/plex_libraries/tv/1*
-          - video/plex_libraries/tv/2*
-          - video/plex_libraries/tv/3*
-          - video/plex_libraries/tv/9*
-          - video/plex_libraries/tv/A*
-          - video/plex_libraries/tv/B*
-          - video/plex_libraries/tv/C*
-          - video/plex_libraries/tv/D*
-          - video/plex_libraries/tv/E*
-          - video/plex_libraries/tv/F*
-          - video/plex_libraries/tv/G*
-          - video/plex_libraries/tv/H*
-          - video/plex_libraries/tv/I*
-          - video/plex_libraries/tv/J*
-          - video/plex_libraries/tv/K*
-          - video/plex_libraries/tv/L*
+          - red/tv-documentaries
+          - red/tv-reality
+          - red/tv/1*
+          - red/tv/2*
+          - red/tv/3*
+          - red/tv/9*
+          - red/tv/A*
+          - red/tv/B*
+          - red/tv/C*
+          - red/tv/D*
+          - red/tv/E*
+          - red/tv/F*
+          - red/tv/G*
+          - red/tv/H*
+          - red/tv/I*
+          - red/tv/J*
+          - red/tv/K*
+          - red/tv/L*
 
       - name: raidvol-3
         targets:
-          - video/plex_libraries/tv/M*
-          - video/plex_libraries/tv/N*
-          - video/plex_libraries/tv/O*
-          - video/plex_libraries/tv/P*
-          - video/plex_libraries/tv/Q*
-          - video/plex_libraries/tv/R*
-          - video/plex_libraries/tv/S*
-          - video/plex_libraries/tv/T*
-          - video/plex_libraries/tv/V*
-          - video/plex_libraries/tv/W*
-          - video/plex_libraries/tv/X*
-          - video/plex_libraries/tv/Y*
+          - red/tv/M*
+          - red/tv/N*
+          - red/tv/O*
+          - red/tv/P*
+          - red/tv/Q*
+          - red/tv/R*
+          - red/tv/S*
+          - red/tv/T*
+          - red/tv/V*
+          - red/tv/W*
+          - red/tv/X*
+          - red/tv/Y*
 
         # labvol
 
