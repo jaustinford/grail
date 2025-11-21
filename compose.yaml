@@ -2,14 +2,14 @@
 services:
 
   ############################################################
-  # backup
+  # backup_raidvol
   ############################################################
 
-  backup:
+  backup_raidvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
     profiles:
-      - backup
+      - backup-raidvol
 
     environment:
       - TZ=America/Denver
@@ -22,7 +22,91 @@ services:
         read_only: false
 
       - type: bind
-        source: ${BACKUP_DST_PATH}
+        source: /mnt/usb-backup/raidvol
+        target: /dst-backup-path
+        read_only: false
+
+    networks:
+      - grail
+
+  ############################################################
+  # restore_raidvol
+  ############################################################
+
+  restore_raidvol:
+    image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
+    entrypoint: python src
+    profiles:
+      - restore-raidvol
+
+    environment:
+      - TZ=America/Denver
+      - BACKUP_OBJECT=${BACKUP_OBJECT}
+
+    volumes:
+      - type: bind
+        source: /mnt/usb-backup/raidvol
+        target: /src-backup-path
+        read_only: false
+
+      - type: volume
+        source: raid_vol
+        target: /dst-backup-path
+        read_only: false
+
+    networks:
+      - grail
+
+  ############################################################
+  # backup_labvol
+  ############################################################
+
+  backup_labvol:
+    image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
+    entrypoint: python src
+    profiles:
+      - backup-labvol
+
+    environment:
+      - TZ=America/Denver
+      - BACKUP_OBJECT=labvol
+
+    volumes:
+      - type: bind
+        source: /mnt/dfs_lvm/lab_dfs
+        target: /src-backup-path
+        read_only: false
+
+      - type: bind
+        source: /mnt/usb-backup/labvol
+        target: /dst-backup-path
+        read_only: false
+
+    networks:
+      - grail
+
+  ############################################################
+  # restore_labvol
+  ############################################################
+
+  restore_labvol:
+    image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
+    entrypoint: python src
+    profiles:
+      - restore-labvol
+
+    environment:
+      - TZ=America/Denver
+      - BACKUP_OBJECT=labvol
+
+    volumes:
+      - type: bind
+        source: /mnt/usb-backup/labvol
+        target: /src-backup-path
+        read_only: false
+
+      - type: bind
+        source: /mnt/dfs_lvm/lab_dfs
         target: /dst-backup-path
         read_only: false
 

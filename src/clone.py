@@ -66,6 +66,12 @@ def manage_dir(backup_direction: str, dst_root, src_dir: str, dst_dir: str):
         else:
             LOGGER.info("Confirmed dir : %s", dst_relative)
 
+        src_dir_stat     = os.stat(src_dir)
+        src_dir_stat_uid = src_dir_stat.st_uid
+        src_dir_stat_gid = src_dir_stat.st_gid
+
+        os.chown(dst_dir, src_dir_stat_uid, src_dir_stat_gid)
+
     elif backup_direction == "reverse":
         if not os.path.isdir(dst_dir):
             LOGGER.info("Removing dir : %s", dst_relative)
@@ -103,6 +109,12 @@ def manage_file(backup_direction: str, dst_root, src_file: str, dst_file: str):
                 dst_file,
                 follow_symlinks=False
             )
+
+        src_file_stat     = os.stat(src_file)
+        src_file_stat_uid = src_file_stat.st_uid
+        src_file_stat_gid = src_file_stat.st_gid
+
+        os.chown(dst_file, src_file_stat_uid, src_file_stat_gid)
 
     elif backup_direction == "reverse":
         if not os.path.isfile(dst_file):
