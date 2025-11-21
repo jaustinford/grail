@@ -29,6 +29,12 @@ services:
     networks:
       - grail
 
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
   ############################################################
   # restore_raidvol
   ############################################################
@@ -56,6 +62,12 @@ services:
 
     networks:
       - grail
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   ############################################################
   # backup_labvol
@@ -85,6 +97,12 @@ services:
     networks:
       - grail
 
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
   ############################################################
   # restore_labvol
   ############################################################
@@ -112,6 +130,12 @@ services:
 
     networks:
       - grail
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
 
 ###########################################################
 # resources
