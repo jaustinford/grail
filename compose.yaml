@@ -68,18 +68,18 @@ services:
         max-file: '10'
 
   ############################################################
-  # backup_labvol
+  # backup_appvol
   ############################################################
 
-  backup_labvol:
+  backup_appvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
     profiles:
-      - backup-labvol
+      - backup-appvol
 
     environment:
       - TZ=America/Denver
-      - BACKUP_OBJECT=labvol
+      - BACKUP_OBJECT=appvol
 
     volumes:
       - type: bind
@@ -88,7 +88,7 @@ services:
         read_only: false
 
       - type: bind
-        source: /mnt/usb-backup/labvol
+        source: /mnt/usb-backup/appvol
         target: /dst-backup-path
         read_only: false
 
@@ -101,22 +101,22 @@ services:
         max-file: '10'
 
   ############################################################
-  # restore_labvol
+  # restore_appvol
   ############################################################
 
-  restore_labvol:
+  restore_appvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
     profiles:
-      - restore-labvol
+      - restore-appvol
 
     environment:
       - TZ=America/Denver
-      - BACKUP_OBJECT=labvol
+      - BACKUP_OBJECT=appvol
 
     volumes:
       - type: bind
-        source: /mnt/usb-backup/labvol
+        source: /mnt/usb-backup/appvol
         target: /src-backup-path
         read_only: false
 

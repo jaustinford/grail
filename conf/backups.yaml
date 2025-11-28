@@ -88,9 +88,9 @@
           - red/tv/X*
           - red/tv/Y*
 
-        # labvol
+        # appvol
 
-      - name: labvol
+      - name: appvol
         targets:
           - deluge
           - elasticsearch
