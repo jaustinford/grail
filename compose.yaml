@@ -14,16 +14,17 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=${BACKUP_OBJECT}
+      - BACKUP_DISK=${BACKUP_DISK}
+      - DISK_PASSWORD=${DISK_PASSWORD}
+      - DISK_MOUNTPOINT=/grail-dst
+
+    devices:
+      - ${BACKUP_DISK}
 
     volumes:
       - type: volume
         source: raid_vol
-        target: /src-backup-path
-        read_only: false
-
-      - type: bind
-        source: /mnt/usb-backup/raidvol
-        target: /dst-backup-path
+        target: /grail-src
         read_only: false
 
     networks:
@@ -47,16 +48,17 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=${BACKUP_OBJECT}
+      - BACKUP_DISK=${BACKUP_DISK}
+      - DISK_PASSWORD=${DISK_PASSWORD}
+      - DISK_MOUNTPOINT=/grail-src
+
+    devices:
+      - ${BACKUP_DISK}
 
     volumes:
-      - type: bind
-        source: /mnt/usb-backup/raidvol
-        target: /src-backup-path
-        read_only: false
-
       - type: volume
         source: raid_vol
-        target: /dst-backup-path
+        target: /grail-dst
         read_only: false
 
     networks:
@@ -80,16 +82,17 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=labvol
+      - BACKUP_DISK=${BACKUP_DISK}
+      - DISK_PASSWORD=${DISK_PASSWORD}
+      - DISK_MOUNTPOINT=/grail-dst
+
+    devices:
+      - ${BACKUP_DISK}
 
     volumes:
       - type: bind
         source: /mnt/dfs_lvm/lab_dfs
-        target: /src-backup-path
-        read_only: false
-
-      - type: bind
-        source: /mnt/usb-backup/labvol
-        target: /dst-backup-path
+        target: /grail-src
         read_only: false
 
     networks:
@@ -113,16 +116,17 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=labvol
+      - BACKUP_DISK=${BACKUP_DISK}
+      - DISK_PASSWORD=${DISK_PASSWORD}
+      - DISK_MOUNTPOINT=/grail-src
+
+    devices:
+      - ${BACKUP_DISK}
 
     volumes:
       - type: bind
-        source: /mnt/usb-backup/labvol
-        target: /src-backup-path
-        read_only: false
-
-      - type: bind
         source: /mnt/dfs_lvm/lab_dfs
-        target: /dst-backup-path
+        target: /grail-dst
         read_only: false
 
     networks:

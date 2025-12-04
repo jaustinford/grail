@@ -1,6 +1,6 @@
 """
-Copy all files and directories in
-/src-backup-path to /dst-backup-path.
+Copy all files and directories between
+backup sources.
 """
 
 import os
@@ -12,6 +12,27 @@ import resolve
 
 LOGGER = logs.logging.getLogger(__name__)
 
+def manage_crypt():
+    """
+    Mount a VeraCrypt encrypted volume
+    and set appropriate symlink.
+    """
+
+    os.system("\
+        veracrypt \
+            --text \
+            --password=\"" + os.environ.get("DISK_PASSWORD") + "\" \
+            --keyfiles \"\" \
+            --pim=0 \
+            --protect-hidden=no " + \
+            os.environ.get("BACKUP_DISK") + " /grail-disk"
+    )
+
+    os.symlink(
+        "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
+        os.environ.get("DISK_MOUNTPOINT")
+    )
+
 def process_backup(backup_direction: str, backup_target: str):
     """
     Direct the flow along whether
@@ -19,12 +40,12 @@ def process_backup(backup_direction: str, backup_target: str):
     """
 
     if backup_direction == "forward":
-        src_root = "/src-backup-path/"
-        dst_root = "/dst-backup-path/"
+        src_root = "/grail-src/"
+        dst_root = "/grail-dst/"
 
     elif backup_direction == "reverse":
-        src_root = "/dst-backup-path/"
-        dst_root = "/src-backup-path/"
+        src_root = "/grail-dst/"
+        dst_root = "/grail-src/"
 
     backup_target_src_fqdn = src_root + backup_target
     backup_target_dst_fqdn = dst_root + backup_target
@@ -63,9 +84,11 @@ def process_backup(backup_direction: str, backup_target: str):
 
 def main():
     """
-    Open config and assign elements and
-    iterate over 'backup_targets'.
+    Mount volume, open config and assign
+    elements and iterate over 'backup_targets'.
     """
+
+    manage_crypt()
 
     for backup_object in constants.CONFIG_OBJECTS:
         if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
