@@ -8,6 +8,7 @@ services:
   backup_raidvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
+
     profiles:
       - backup-raidvol
 
@@ -42,6 +43,7 @@ services:
   restore_raidvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
+
     profiles:
       - restore-raidvol
 
@@ -58,7 +60,7 @@ services:
     volumes:
       - type: volume
         source: raid_vol
-        target: /grail-dst
+        target: /dst-backup-path
         read_only: false
 
     networks:
@@ -70,29 +72,29 @@ services:
         max-file: '10'
 
   ############################################################
-  # backup_labvol
+  # backup_appvol
   ############################################################
 
-  backup_labvol:
+  backup_appvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
+
     profiles:
-      - backup-labvol
+      - backup-appvol
 
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=labvol
-      - BACKUP_DISK=${BACKUP_DISK}
-      - DISK_PASSWORD=${DISK_PASSWORD}
-      - DISK_MOUNTPOINT=/grail-dst
-
-    devices:
-      - ${BACKUP_DISK}
 
     volumes:
       - type: bind
         source: /mnt/dfs_lvm/lab_dfs
-        target: /grail-src
+        target: /src-backup-path
+        read_only: false
+
+      - type: bind
+        source: /mnt/usb-backup/labvol
+        target: /dst-backup-path
         read_only: false
 
     networks:
@@ -104,26 +106,26 @@ services:
         max-file: '10'
 
   ############################################################
-  # restore_labvol
+  # restore_appvol
   ############################################################
 
-  restore_labvol:
+  restore_appvol:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
+
     profiles:
-      - restore-labvol
+      - restore-appvol
 
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=labvol
-      - BACKUP_DISK=${BACKUP_DISK}
-      - DISK_PASSWORD=${DISK_PASSWORD}
-      - DISK_MOUNTPOINT=/grail-src
-
-    devices:
-      - ${BACKUP_DISK}
 
     volumes:
+      - type: bind
+        source: /mnt/usb-backup/labvol
+        target: /src-backup-path
+        read_only: false
+
       - type: bind
         source: /mnt/dfs_lvm/lab_dfs
         target: /grail-dst
@@ -142,16 +144,18 @@ services:
 ###########################################################
 
 volumes:
-  raid_vol:
+  raidvol_root_share:
     driver_opts:
       type: cifs
       o: "\
-        username=${RAID_VOL_USERNAME},\
-        password=${RAID_VOL_PASSWORD},\
-        uid=${LOCAL_USER_UID},\
-        gid=${LOCAL_USER_GID},\
+        username=${RAIDVOL_ROOT_SHARE_USERNAME},\
+        password=${RAIDVOL_ROOT_SHARE_PASSWORD},\
+        uid=${RAIDVOL_ROOT_SHARE_UID},\
+        gid=${RAIDVOL_ROOT_SHARE_GID},\
+        dir_mode=0770,\
+        file_mode=0770,\
         iocharset=utf8"
-      device: //${RAID_VOL_HOST}/${RAID_VOL_SHARE}
+      device: //${RAIDVOL_ROOT_SHARE_HOST}/${RAIDVOL_ROOT_SHARE_NAME}
 
 networks:
   grail:

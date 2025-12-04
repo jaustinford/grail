@@ -37,20 +37,13 @@
       - name: raidvol-1
         targets:
           - black
-          - blue/documents
-          - blue/music
-          - blue/pictures
-          - blue/video/educational
-          - blue/video/youtube
+          - blue
           - green
           - red/movies*
           - red/tv-deutsch
           - red/tv-espanol
           - red/tv-private
-          - white/backups
-          - white/games
-          - white/hacker
-          - white/software
+          - white
 
       - name: raidvol-2
         targets:
@@ -88,9 +81,9 @@
           - red/tv/X*
           - red/tv/Y*
 
-        # labvol
+        # appvol
 
-      - name: labvol
+      - name: appvol
         targets:
           - deluge
           - elasticsearch
