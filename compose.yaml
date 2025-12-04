@@ -84,17 +84,18 @@ services:
 
     environment:
       - TZ=America/Denver
-      - BACKUP_OBJECT=labvol
+      - BACKUP_OBJECT=appvol
+      - BACKUP_DISK=${BACKUP_DISK}
+      - DISK_PASSWORD=${DISK_PASSWORD}
+      - DISK_MOUNTPOINT=/grail-dst
+
+    devices:
+      - ${BACKUP_DISK}
 
     volumes:
       - type: bind
         source: /mnt/dfs_lvm/lab_dfs
         target: /src-backup-path
-        read_only: false
-
-      - type: bind
-        source: /mnt/usb-backup/labvol
-        target: /dst-backup-path
         read_only: false
 
     networks:
@@ -118,14 +119,15 @@ services:
 
     environment:
       - TZ=America/Denver
-      - BACKUP_OBJECT=labvol
+      - BACKUP_OBJECT=appvol
+      - BACKUP_DISK=${BACKUP_DISK}
+      - DISK_PASSWORD=${DISK_PASSWORD}
+      - DISK_MOUNTPOINT=/grail-src
+
+    devices:
+      - ${BACKUP_DISK}
 
     volumes:
-      - type: bind
-        source: /mnt/usb-backup/labvol
-        target: /src-backup-path
-        read_only: false
-
       - type: bind
         source: /mnt/dfs_lvm/lab_dfs
         target: /grail-dst
