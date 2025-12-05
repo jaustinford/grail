@@ -120,8 +120,7 @@ def main():
             process_backup("forward", backup_target)
             process_backup("reverse", backup_target)
 
-    except Exception as e:
-        LOGGER.error(e)
+    except:
         manage_crypt("unmount")
 
     manage_crypt("unmount")
