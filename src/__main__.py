@@ -18,10 +18,13 @@ def manage_crypt(crypt_mode: str):
     and set appropriate symlink.
     """
 
+    grail_backup_mountpoint = "/grail-disk"
+
     if crypt_mode == "mount":
         LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK"))
 
-        os.makedirs("/grail-disk")
+        if not os.path.isdir(grail_backup_mountpoint):
+            os.makedirs(grail_backup_mountpoint)
 
         os.system("\
             veracrypt \
@@ -31,7 +34,7 @@ def manage_crypt(crypt_mode: str):
                 --keyfiles \"\" \
                 --pim=0 \
                 --protect-hidden=no " + \
-                os.environ.get("BACKUP_DISK") + " /grail-disk"
+                os.environ.get("BACKUP_DISK") + " " + grail_backup_mountpoint
         )
 
         os.symlink(
