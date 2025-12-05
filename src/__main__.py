@@ -124,9 +124,6 @@ def main():
         LOGGER.error(file_exists_error)
         manage_crypt("unmount")
 
-    except:
-        manage_crypt("unmount")
-
     manage_crypt("unmount")
 
 if __name__ == "__main__":
