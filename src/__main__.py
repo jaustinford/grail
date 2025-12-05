@@ -37,12 +37,6 @@ def manage_crypt(crypt_mode: str):
                 os.environ.get("BACKUP_DISK") + " " + grail_backup_mountpoint
         )
 
-        if not os.path.islink(os.environ.get("DISK_MOUNTPOINT")):
-            os.symlink(
-                "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
-                os.environ.get("DISK_MOUNTPOINT")
-            )
-
     elif crypt_mode == "unmount":
         LOGGER.info("Attempting to unmount : %s", os.environ.get("BACKUP_DISK"))
 
@@ -108,16 +102,27 @@ def main():
 
     manage_crypt("mount")
 
-    for backup_object in constants.CONFIG_OBJECTS:
-        if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
-            LOGGER.info("Processing backup : %s", backup_object["name"])
+    try:
+        if not os.path.islink(os.environ.get("DISK_MOUNTPOINT")):
+            os.symlink(
+                "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
+                os.environ.get("DISK_MOUNTPOINT")
+            )
 
-            backup_targets = backup_object["targets"]
-            break
+        for backup_object in constants.CONFIG_OBJECTS:
+            if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
+                LOGGER.info("Processing backup : %s", backup_object["name"])
 
-    for backup_target in backup_targets:
-        process_backup("forward", backup_target)
-        process_backup("reverse", backup_target)
+                backup_targets = backup_object["targets"]
+                break
+
+        for backup_target in backup_targets:
+            process_backup("forward", backup_target)
+            process_backup("reverse", backup_target)
+
+    except Exception as e:
+        LOGGER.error(e)
+        manage_crypt("unmount")
 
     manage_crypt("unmount")
 
