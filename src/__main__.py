@@ -37,10 +37,11 @@ def manage_crypt(crypt_mode: str):
                 os.environ.get("BACKUP_DISK") + " " + grail_backup_mountpoint
         )
 
-        os.symlink(
-            "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
-            os.environ.get("DISK_MOUNTPOINT")
-        )
+        if not os.path.islink(os.environ.get("DISK_MOUNTPOINT")):
+            os.symlink(
+                "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
+                os.environ.get("DISK_MOUNTPOINT")
+            )
 
     elif crypt_mode == "unmount":
         LOGGER.info("Attempting to unmount : %s", os.environ.get("BACKUP_DISK"))
