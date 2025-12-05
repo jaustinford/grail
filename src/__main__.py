@@ -12,26 +12,40 @@ import resolve
 
 LOGGER = logs.logging.getLogger(__name__)
 
-def manage_crypt():
+def manage_crypt(crypt_mode: str):
     """
     Mount a VeraCrypt encrypted volume
     and set appropriate symlink.
     """
 
-    os.system("\
-        veracrypt \
-            --text \
-            --password=\"" + os.environ.get("DISK_PASSWORD") + "\" \
-            --keyfiles \"\" \
-            --pim=0 \
-            --protect-hidden=no " + \
-            os.environ.get("BACKUP_DISK") + " /grail-disk"
-    )
+    if crypt_mode == "mount":
+        LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK"))
 
-    os.symlink(
-        "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
-        os.environ.get("DISK_MOUNTPOINT")
-    )
+        os.makedirs("/grail-disk")
+
+        os.system("\
+            veracrypt \
+                --text \
+                --mount-options=nokernelcrypto \
+                --password=\"" + os.environ.get("DISK_PASSWORD") + "\" \
+                --keyfiles \"\" \
+                --pim=0 \
+                --protect-hidden=no " + \
+                os.environ.get("BACKUP_DISK") + " /grail-disk"
+        )
+
+        os.symlink(
+            "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
+            os.environ.get("DISK_MOUNTPOINT")
+        )
+
+    elif crypt_mode == "unmount":
+        LOGGER.info("Attempting to unmount : %s", os.environ.get("BACKUP_DISK"))
+
+        os.system("\
+            veracrypt \
+                --unmount"
+        )
 
 def process_backup(backup_direction: str, backup_target: str):
     """
@@ -88,7 +102,7 @@ def main():
     elements and iterate over 'backup_targets'.
     """
 
-    manage_crypt()
+    manage_crypt("mount")
 
     for backup_object in constants.CONFIG_OBJECTS:
         if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
@@ -100,6 +114,8 @@ def main():
     for backup_target in backup_targets:
         process_backup("forward", backup_target)
         process_backup("reverse", backup_target)
+
+    manage_crypt("unmount")
 
 if __name__ == "__main__":
     main()

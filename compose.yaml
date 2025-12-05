@@ -15,7 +15,7 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=${BACKUP_OBJECT}
-      - BACKUP_DISK=${BACKUP_DISK}
+      - BACKUP_DISK=${BACKUP_DISK}1
       - DISK_PASSWORD=${DISK_PASSWORD}
       - DISK_MOUNTPOINT=/grail-dst
 
@@ -50,7 +50,7 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=${BACKUP_OBJECT}
-      - BACKUP_DISK=${BACKUP_DISK}
+      - BACKUP_DISK=${BACKUP_DISK}1
       - DISK_PASSWORD=${DISK_PASSWORD}
       - DISK_MOUNTPOINT=/grail-src
 
@@ -85,7 +85,7 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=appvol
-      - BACKUP_DISK=${BACKUP_DISK}
+      - BACKUP_DISK=${BACKUP_DISK}1
       - DISK_PASSWORD=${DISK_PASSWORD}
       - DISK_MOUNTPOINT=/grail-dst
 
@@ -120,7 +120,7 @@ services:
     environment:
       - TZ=America/Denver
       - BACKUP_OBJECT=appvol
-      - BACKUP_DISK=${BACKUP_DISK}
+      - BACKUP_DISK=${BACKUP_DISK}1
       - DISK_PASSWORD=${DISK_PASSWORD}
       - DISK_MOUNTPOINT=/grail-src
 
