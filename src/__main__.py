@@ -120,6 +120,10 @@ def main():
             process_backup("forward", backup_target)
             process_backup("reverse", backup_target)
 
+    except FileExistsError as file_exists_error:
+        LOGGER.error(file_exists_error)
+        manage_crypt("unmount")
+
     except:
         manage_crypt("unmount")
 
