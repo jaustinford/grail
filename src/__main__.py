@@ -30,7 +30,7 @@ def manage_crypt(crypt_mode: str):
             veracrypt \
                 --text \
                 --mount-options=nokernelcrypto \
-                --password=\"" + os.environ.get("DISK_PASSWORD") + "\" \
+                --password=\'" + os.environ.get("DISK_PASSWORD") + "\' \
                 --keyfiles \"\" \
                 --pim=0 \
                 --protect-hidden=no " + \
