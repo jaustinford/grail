@@ -50,7 +50,13 @@ def manage_dir(backup_direction: str, dst_root, src_dir: str, dst_dir: str):
     metadata elements.
     """
 
-    dst_relative = re.sub(dst_root, backup_direction + " - ", dst_dir)
+    if backup_direction == "forward":
+        direction_colored = "\033[" + "0;32m" + backup_direction + "\033[" + "0;0m"
+
+    elif backup_direction == "reverse":
+        direction_colored = "\033[" + "0;31m" + backup_direction + "\033[" + "0;0m"
+
+    dst_relative = re.sub(dst_root, direction_colored + " - ", dst_dir)
 
     if backup_direction == "forward":
         if not os.path.isdir(dst_dir):
@@ -90,7 +96,13 @@ def manage_file(backup_direction: str, dst_root, src_file: str, dst_file: str):
 
     should_copy = False
 
-    dst_relative = re.sub(dst_root, backup_direction + " - ", dst_file)
+    if backup_direction == "forward":
+        direction_colored = "\033[" + "0;32m" + backup_direction + "\033[" + "0;0m"
+
+    elif backup_direction == "reverse":
+        direction_colored = "\033[" + "0;31m" + backup_direction + "\033[" + "0;0m"
+
+    dst_relative = re.sub(dst_root, direction_colored + " - ", dst_file)
 
     if backup_direction == "forward":
         if not os.path.isfile(dst_file):
