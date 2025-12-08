@@ -64,10 +64,12 @@
           - red/tv/I*
           - red/tv/J*
           - red/tv/K*
-          - red/tv/L*
+          - red/tv/La*
+          - red/tv/Lo*
 
       - name: raidvol-3
         targets:
+          - red/tv/Lu*
           - red/tv/M*
           - red/tv/N*
           - red/tv/O*
