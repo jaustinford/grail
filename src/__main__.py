@@ -18,25 +18,23 @@ def manage_crypt(crypt_mode: str):
     and set appropriate symlink.
     """
 
+    grail_backup_mountpoint = "/grail-disk"
+
     if crypt_mode == "mount":
         LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK"))
 
-        os.makedirs("/grail-disk")
+        if not os.path.isdir(grail_backup_mountpoint):
+            os.makedirs(grail_backup_mountpoint)
 
         os.system("\
             veracrypt \
                 --text \
                 --mount-options=nokernelcrypto \
-                --password=\"" + os.environ.get("DISK_PASSWORD") + "\" \
+                --password=\'" + os.environ.get("DISK_PASSWORD") + "\' \
                 --keyfiles \"\" \
                 --pim=0 \
                 --protect-hidden=no " + \
-                os.environ.get("BACKUP_DISK") + " /grail-disk"
-        )
-
-        os.symlink(
-            "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
-            os.environ.get("DISK_MOUNTPOINT")
+                os.environ.get("BACKUP_DISK") + " " + grail_backup_mountpoint
         )
 
     elif crypt_mode == "unmount":
@@ -104,16 +102,31 @@ def main():
 
     manage_crypt("mount")
 
-    for backup_object in constants.CONFIG_OBJECTS:
-        if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
-            LOGGER.info("Processing backup : %s", backup_object["name"])
+    try:
+        if not os.path.islink(os.environ.get("DISK_MOUNTPOINT")):
+            os.symlink(
+                "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
+                os.environ.get("DISK_MOUNTPOINT")
+            )
 
-            backup_targets = backup_object["targets"]
-            break
+        for backup_object in constants.CONFIG_OBJECTS:
+            if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
+                LOGGER.info("Processing backup : %s", backup_object["name"])
 
-    for backup_target in backup_targets:
-        process_backup("forward", backup_target)
-        process_backup("reverse", backup_target)
+                backup_targets = backup_object["targets"]
+                break
+
+        for backup_target in backup_targets:
+            process_backup("forward", backup_target)
+            process_backup("reverse", backup_target)
+
+    except FileExistsError as file_exists_error:
+        LOGGER.error(file_exists_error)
+        manage_crypt("unmount")
+
+    except OSError as os_error:
+        LOGGER.error(os_error)
+        manage_crypt("unmount")
 
     manage_crypt("unmount")
 
