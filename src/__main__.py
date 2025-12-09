@@ -120,12 +120,8 @@ def main():
             process_backup("forward", backup_target)
             process_backup("reverse", backup_target)
 
-    except FileExistsError as file_exists_error:
-        LOGGER.error(file_exists_error)
-        manage_crypt("unmount")
-
-    except OSError as os_error:
-        LOGGER.error(os_error)
+    except Exception as e: # pylint: disable=broad-exception-caught
+        LOGGER.error(e)
         manage_crypt("unmount")
 
     manage_crypt("unmount")
