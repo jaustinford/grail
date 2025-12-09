@@ -120,8 +120,8 @@ def main():
             process_backup("forward", backup_target)
             process_backup("reverse", backup_target)
 
-    except Exception as e: # pylint: disable=broad-exception-caught
-        LOGGER.error(e)
+    except Exception as broad_exception: # pylint: disable=broad-exception-caught
+        LOGGER.error(broad_exception)
         manage_crypt("unmount")
 
     manage_crypt("unmount")
