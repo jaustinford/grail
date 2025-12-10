@@ -32,8 +32,6 @@
 
     objects:
 
-        # raidvol
-
       - name: raidvol-1
         targets:
           - black
@@ -83,14 +81,12 @@
           - red/tv/X*
           - red/tv/Y*
 
-        # appvol
-
       - name: appvol
         targets:
           - deluge
           - elasticsearch
           - filebrowser
-          # - gitlab
+          - gitlab
           - keycloak
           - nexus
           - nginx
