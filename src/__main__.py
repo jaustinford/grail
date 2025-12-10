@@ -49,7 +49,7 @@ def manage_crypt(crypt_mode: str):
 def process_backup(backup_direction: str, backup_target: str):
     """
     Direct the flow along whether
-    'backup_target_src_fqdn' has a wildcard.
+    'backup_target_src_fq' has a wildcard.
     """
 
     if backup_direction == "forward":
@@ -60,39 +60,39 @@ def process_backup(backup_direction: str, backup_target: str):
         src_root = "/grail-dst/"
         dst_root = "/grail-src/"
 
-    backup_target_src_fqdn = src_root + backup_target
-    backup_target_dst_fqdn = dst_root + backup_target
+    backup_target_src_fq = src_root + backup_target
+    backup_target_dst_fq = dst_root + backup_target
 
-    if "*" in backup_target_src_fqdn:
-        backup_target_fqdns = resolve.manage_wildcards(
+    if "*" in backup_target_src_fq:
+        backup_target_fqs = resolve.manage_wildcards(
             src_root,
             dst_root,
-            backup_target_src_fqdn
+            backup_target_src_fq
         )
 
     else:
-        backup_target_fqdns = [
+        backup_target_fqs = [
             (
-                backup_target_src_fqdn,
-                backup_target_dst_fqdn
+                backup_target_src_fq,
+                backup_target_dst_fq
             )
         ]
 
-    for backup_target_fqdn in backup_target_fqdns:
-        if os.path.isfile(backup_target_fqdn[0]):
+    for backup_target_fq in backup_target_fqs:
+        if os.path.isfile(backup_target_fq[0]) or os.path.islink(backup_target_fq[0]):
             clone.manage_file(
                 backup_direction,
                 dst_root,
-                backup_target_fqdn[0],
-                backup_target_fqdn[1]
+                backup_target_fq[0],
+                backup_target_fq[1]
             )
 
-        elif os.path.isdir(backup_target_fqdn[0]):
+        elif os.path.isdir(backup_target_fq[0]):
             resolve.manage_dirs(
                 backup_direction,
                 src_root,
                 dst_root,
-                backup_target_fqdn[0]
+                backup_target_fq[0]
             )
 
 def main():

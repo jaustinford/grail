@@ -44,7 +44,7 @@ def diff_file(src_file: str, dst_file: str, dst_relative: str, should_copy: bool
 
     return should_copy
 
-def manage_dir(backup_direction: str, dst_root, src_dir: str, dst_dir: str):
+def manage_dir(backup_direction: str, dst_root: str, src_dir: str, dst_dir: str):
     """
     Copy directories and preserve
     metadata elements.
@@ -84,7 +84,7 @@ def manage_dir(backup_direction: str, dst_root, src_dir: str, dst_dir: str):
         else:
             LOGGER.info("Confirmed dir : %s", dst_relative)
 
-def manage_file(backup_direction: str, dst_root, src_file: str, dst_file: str):
+def manage_file(backup_direction: str, dst_root: str, src_file: str, dst_file: str):
     """
     Copy files and preserve
     metadata elements.
