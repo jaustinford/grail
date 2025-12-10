@@ -83,17 +83,17 @@
 
       - name: appvol
         targets:
-          - deluge
-          - elasticsearch
-          - filebrowser
+          # - deluge
+          # - elasticsearch
+          # - filebrowser
           - gitlab
-          - keycloak
-          - nexus
-          - nginx
-          - openvpnas
-          - pihole
-          - plex
-          - redis
-          - runner
-          - tautulli
-          - zoneminder
+          # - keycloak
+          # - nexus
+          # - nginx
+          # - openvpnas
+          # - pihole
+          # - plex
+          # - redis
+          # - runner
+          # - tautulli
+          # - zoneminder

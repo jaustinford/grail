@@ -63,11 +63,7 @@ def manage_dir(backup_direction: str, dst_root, src_dir: str, dst_dir: str):
             LOGGER.info("Creating dir : %s", dst_relative)
 
             os.makedirs(dst_dir)
-            shutil.copystat(
-                src_dir,
-                dst_dir,
-                follow_symlinks=False
-            )
+            shutil.copystat(src_dir, dst_dir, follow_symlinks=False)
 
         else:
             LOGGER.info("Confirmed dir : %s", dst_relative)
@@ -119,11 +115,8 @@ def manage_file(backup_direction: str, dst_root, src_file: str, dst_file: str):
 
         if should_copy:
             if not os.path.islink(dst_file):
-                shutil.copy2(
-                    src_file,
-                    dst_file,
-                    follow_symlinks=False
-                )
+                shutil.copyfile(src_file, dst_file, follow_symlinks=False)
+                shutil.copystat(src_file, dst_file, follow_symlinks=False)
 
         if not os.path.islink(dst_file):
             src_file_stat      = os.stat(src_file)
