@@ -101,7 +101,7 @@ def manage_file(backup_direction: str, dst_root, src_file: str, dst_file: str):
     dst_relative = re.sub(dst_root, direction_colored + " - ", dst_file)
 
     if backup_direction == "forward":
-        if not os.path.isfile(dst_file):
+        if not os.path.exists(dst_file):
             LOGGER.info("Creating file : %s", dst_relative)
             should_copy = True
 
