@@ -118,19 +118,21 @@ def manage_file(backup_direction: str, dst_root, src_file: str, dst_file: str):
             )
 
         if should_copy:
-            shutil.copy2(
-                src_file,
-                dst_file,
-                follow_symlinks=False
-            )
+            if not os.path.islink(dst_file):
+                shutil.copy2(
+                    src_file,
+                    dst_file,
+                    follow_symlinks=False
+                )
 
         src_file_stat      = os.stat(src_file)
         src_file_stat_uid  = src_file_stat.st_uid
         src_file_stat_gid  = src_file_stat.st_gid
         src_file_stat_mode = src_file_stat.st_mode
 
-        os.chown(dst_file, src_file_stat_uid, src_file_stat_gid)
-        os.chmod(dst_file, src_file_stat_mode)
+        if not os.path.islink(dst_file):
+            os.chown(dst_file, src_file_stat_uid, src_file_stat_gid)
+            os.chmod(dst_file, src_file_stat_mode)
 
     elif backup_direction == "reverse":
         if not os.path.isfile(dst_file):

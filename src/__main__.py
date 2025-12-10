@@ -4,6 +4,7 @@ backup sources.
 """
 
 import os
+import traceback
 
 import constants
 import logs
@@ -120,11 +121,12 @@ def main():
             process_backup("forward", backup_target)
             process_backup("reverse", backup_target)
 
-    except Exception as broad_exception: # pylint: disable=broad-exception-caught
-        LOGGER.error(broad_exception)
         manage_crypt("unmount")
 
-    manage_crypt("unmount")
+    except Exception as broad_exception: # pylint: disable=broad-exception-caught
+        LOGGER.error(broad_exception)
+        traceback.print_exc()
+        manage_crypt("unmount")
 
 if __name__ == "__main__":
     main()
