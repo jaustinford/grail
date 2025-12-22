@@ -24,7 +24,7 @@ def manage_crypt(crypt_mode: str):
 
     backup_disk_password = vault.get_secret(
         "grail",
-        "disk/raid_vol/backups"
+        "disks/raid_vol/backups"
     )[os.environ.get("BACKUP_DISK_NAME")]
 
     if crypt_mode == "mount":
