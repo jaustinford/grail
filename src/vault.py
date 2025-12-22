@@ -39,7 +39,7 @@ def get_secret(approle_name: str, secret_path: str):
     'secret_path' and return the data field.
     """
 
-    vault_url = "https://access.proxy-int.pendragonlab.com"
+    vault_url = "http://192.168.40.1:32524"
 
     vault_unauth_client = hvac.Client(url=vault_url)
 
