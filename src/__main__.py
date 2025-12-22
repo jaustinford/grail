@@ -9,48 +9,10 @@ import traceback
 import constants
 import logs
 import clone
+import vcrypt
 import resolve
-import vault
 
 LOGGER = logs.logging.getLogger(__name__)
-
-def manage_crypt(crypt_mode: str):
-    """
-    Mount a VeraCrypt encrypted volume
-    and set appropriate symlink.
-    """
-
-    grail_backup_mountpoint = "/grail-disk"
-
-    backup_disk_password = vault.get_secret(
-        "grail",
-        "disks/raid_vol/backups"
-    )[os.environ.get("BACKUP_DISK_NAME")]
-
-    if crypt_mode == "mount":
-        LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK_DEVICE"))
-
-        if not os.path.isdir(grail_backup_mountpoint):
-            os.makedirs(grail_backup_mountpoint)
-
-        os.system("\
-            veracrypt \
-                --text \
-                --mount-options=nokernelcrypto \
-                --password=\'" + backup_disk_password + "\' \
-                --keyfiles \"\" \
-                --pim=0 \
-                --protect-hidden=no " + \
-                os.environ.get("BACKUP_DISK_DEVICE") + " " + grail_backup_mountpoint
-        )
-
-    elif crypt_mode == "unmount":
-        LOGGER.info("Attempting to unmount : %s", os.environ.get("BACKUP_DISK_DEVICE"))
-
-        os.system("\
-            veracrypt \
-                --unmount"
-        )
 
 def process_backup(backup_direction: str, backup_target: str):
     """
@@ -107,7 +69,7 @@ def main():
     elements and iterate over 'backup_targets'.
     """
 
-    manage_crypt("mount")
+    vcrypt.mount()
 
     try:
         if not os.path.islink(os.environ.get("BACKUP_DISK_MOUNTPOINT")):
@@ -127,12 +89,12 @@ def main():
             process_backup("forward", backup_target)
             process_backup("reverse", backup_target)
 
-        manage_crypt("unmount")
+        vcrypt.unmount()
 
     except Exception as broad_exception: # pylint: disable=broad-exception-caught
         LOGGER.error(broad_exception)
         traceback.print_exc()
-        manage_crypt("unmount")
+        vcrypt.unmount()
 
 if __name__ == "__main__":
     main()
