@@ -4,8 +4,8 @@ authorized secrets using the AppRole
 authentication method.
 """
 
-import hvac
 import json
+import hvac
 
 def read_approle(approle_file: str):
     """
@@ -14,7 +14,7 @@ def read_approle(approle_file: str):
     object.
     """
 
-    with open("/approle/" + approle_file) as approle_opened:
+    with open("/approle/" + approle_file, "r", encoding="utf-8") as approle_opened:
         approle_read = approle_opened.read()
         approle_json = json.loads(approle_read)
 
