@@ -10,6 +10,7 @@ import constants
 import logs
 import clone
 import resolve
+import vault
 
 LOGGER = logs.logging.getLogger(__name__)
 
@@ -21,8 +22,13 @@ def manage_crypt(crypt_mode: str):
 
     grail_backup_mountpoint = "/grail-disk"
 
+    backup_disk_password = vault.get_secret(
+        "grail",
+        "disk/raid_vol/backups"
+    )[os.environ.get("BACKUP_DISK_NAME")]
+
     if crypt_mode == "mount":
-        LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK"))
+        LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK_DEVICE"))
 
         if not os.path.isdir(grail_backup_mountpoint):
             os.makedirs(grail_backup_mountpoint)
@@ -31,15 +37,15 @@ def manage_crypt(crypt_mode: str):
             veracrypt \
                 --text \
                 --mount-options=nokernelcrypto \
-                --password=\'" + os.environ.get("DISK_PASSWORD") + "\' \
+                --password=\'" + backup_disk_password + "\' \
                 --keyfiles \"\" \
                 --pim=0 \
                 --protect-hidden=no " + \
-                os.environ.get("BACKUP_DISK") + " " + grail_backup_mountpoint
+                os.environ.get("BACKUP_DISK_DEVICE") + " " + grail_backup_mountpoint
         )
 
     elif crypt_mode == "unmount":
-        LOGGER.info("Attempting to unmount : %s", os.environ.get("BACKUP_DISK"))
+        LOGGER.info("Attempting to unmount : %s", os.environ.get("BACKUP_DISK_DEVICE"))
 
         os.system("\
             veracrypt \
@@ -104,10 +110,10 @@ def main():
     manage_crypt("mount")
 
     try:
-        if not os.path.islink(os.environ.get("DISK_MOUNTPOINT")):
+        if not os.path.islink(os.environ.get("BACKUP_DISK_MOUNTPOINT")):
             os.symlink(
                 "/grail-disk/" + os.environ.get("BACKUP_OBJECT").split("-")[0],
-                os.environ.get("DISK_MOUNTPOINT")
+                os.environ.get("BACKUP_DISK_MOUNTPOINT")
             )
 
         for backup_object in constants.CONFIG_OBJECTS:

@@ -4,7 +4,8 @@ ARG TARGETARCH
 
 RUN \
     pip3 install \
-        pyyaml
+        pyyaml \
+        hvac
 
 RUN \
     apt update -y ; \

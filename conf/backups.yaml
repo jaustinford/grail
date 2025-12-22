@@ -96,4 +96,5 @@
           - redis
           - runner
           - tautulli
+          - vault
           - zoneminder
