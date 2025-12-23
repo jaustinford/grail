@@ -30,12 +30,13 @@ def mount(vault_token: str):
         os.makedirs(grail_backup_mountpoint)
 
     os.system("\
-        veracrypt \
+        echo '" + disk_password + "' | veracrypt \
             --text \
             --mount-options=nokernelcrypto \
-            --password=\'" + disk_password + "\' \
+            --stdin \
             --keyfiles \"\" \
             --pim=0 \
+            --non-interactive \
             --protect-hidden=no " + \
             os.environ.get("BACKUP_DISK_DEVICE") + " " + grail_backup_mountpoint
     )
