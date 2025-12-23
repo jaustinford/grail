@@ -7,6 +7,8 @@ authentication method.
 import json
 import hvac
 
+VAULT_URL = "http://192.168.40.1:32524"
+
 def read_approle(approle_file: str):
     """
     Read the AppRole credentials from a
@@ -20,37 +22,33 @@ def read_approle(approle_file: str):
 
     return approle_json
 
-def vault_approle_login(vault_client: hvac.Client, role_id: str, secret_id: str):
+def approle_login(approle_name: str):
     """
     Login to AppRole in Vault using
-    retrieved 'role_id' and 'secret_id'.
+    retrieved 'role_id' and 'secret_id'
+    fields provided in /approle, mounted
+    from /root/approle on the host.
     """
 
-    client_token = vault_client.auth.approle.login(
-        role_id=role_id,
-        secret_id=secret_id
+    vault_unauth_client = hvac.Client(url=VAULT_URL)
+    approle_credentials = read_approle(approle_name + ".json")
+
+    client_token = vault_unauth_client.auth.approle.login(
+        role_id=approle_credentials["role_id"],
+        secret_id=approle_credentials["secret_id"]
     )["auth"]["client_token"]
 
     return client_token
 
-def get_secret(approle_name: str, secret_path: str):
+def get_secret(vault_token: str, secret_path: str):
     """
-    Use generated AppRole token to access
-    'secret_path' and return the data field.
+    Use generated AppRole 'vault_token'
+    to access 'secret_path' and return
+    the data field.
     """
-
-    vault_url = "http://192.168.40.1:32524"
-
-    vault_unauth_client = hvac.Client(url=vault_url)
-
-    vault_token = vault_approle_login(
-        vault_unauth_client,
-        read_approle(approle_name + ".json")["role_id"],
-        read_approle(approle_name + ".json")["secret_id"]
-    )
 
     vault_auth_client = hvac.Client(
-        url=vault_url,
+        url=VAULT_URL,
         token=vault_token
     )
 

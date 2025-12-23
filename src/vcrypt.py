@@ -6,12 +6,12 @@ the filesystem.
 
 import os
 
-import vault
+import hvault
 import logs
 
 LOGGER = logs.logging.getLogger(__name__)
 
-def mount():
+def mount(vault_token: str):
     """
     Mount a VeraCrypt encrypted volume
     and set appropriate symlink.
@@ -19,8 +19,8 @@ def mount():
 
     grail_backup_mountpoint = "/grail-disk"
 
-    backup_disk_password = vault.get_secret(
-        "grail",
+    disk_password = hvault.get_secret(
+        vault_token,
         "disks/raid_vol/backups"
     )[os.environ.get("BACKUP_DISK_NAME")]
 
@@ -33,7 +33,7 @@ def mount():
         veracrypt \
             --text \
             --mount-options=nokernelcrypto \
-            --password=\'" + backup_disk_password + "\' \
+            --password=\'" + disk_password + "\' \
             --keyfiles \"\" \
             --pim=0 \
             --protect-hidden=no " + \

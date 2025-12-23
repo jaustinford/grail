@@ -9,8 +9,10 @@ import traceback
 import constants
 import logs
 import clone
+import hvault
 import vcrypt
 import resolve
+import rsmb
 
 LOGGER = logs.logging.getLogger(__name__)
 
@@ -69,7 +71,12 @@ def main():
     elements and iterate over 'backup_targets'.
     """
 
-    vcrypt.mount()
+    vault_token = hvault.approle_login("grail")
+
+    if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
+        rsmb.mount(vault_token)
+
+    vcrypt.mount(vault_token)
 
     try:
         if not os.path.islink(os.environ.get("BACKUP_DISK_MOUNTPOINT")):
@@ -91,10 +98,17 @@ def main():
 
         vcrypt.unmount()
 
+        if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
+            rsmb.unmount()
+
     except Exception as broad_exception: # pylint: disable=broad-exception-caught
         LOGGER.error(broad_exception)
         traceback.print_exc()
+
         vcrypt.unmount()
+
+        if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
+            rsmb.unmount()
 
 if __name__ == "__main__":
     main()
