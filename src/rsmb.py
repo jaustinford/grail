@@ -26,12 +26,12 @@ def mount(vault_token: str, rsmb_mount: str):
     if not os.path.isdir(rsmb_mount):
         os.makedirs(rsmb_mount)
 
-    SMB_USER = hvault.get_secret(
+    smb_user = hvault.get_secret(
         vault_token,
         "users/raid_vol/" + SMB_PATH
     )["USERNAME"]
 
-    SMB_PASS = hvault.get_secret(
+    smb_pass = hvault.get_secret(
         vault_token,
         "users/raid_vol/" + SMB_PATH
     )["PASSWORD"]
@@ -42,7 +42,7 @@ def mount(vault_token: str, rsmb_mount: str):
         "mount \
             --type cifs \
             //" + SMB_HOST + "/" + SMB_NAME + " " + rsmb_mount + " \
-            --options 'username=" + SMB_USER + ",password=" + SMB_PASS + "," + SMB_OPTS + "'"
+            --options 'username=" + smb_user + ",password=" + smb_pass + "," + SMB_OPTS + "'"
     )
 
 def unmount(rsmb_mount: str):
