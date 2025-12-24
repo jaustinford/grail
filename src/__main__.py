@@ -20,7 +20,7 @@ def main():
     elements and iterate over 'backup_targets'.
     """
 
-    vault_token  = hvault.approle_login("grail")
+    vault_token = hvault.approle_login("grail")
 
     if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
         rsmb_mount = gbackup.get_rsmb_mount()
