@@ -6,18 +6,17 @@ the filesystem.
 
 import os
 
-import hvault
 import logs
+import hvault
 
 LOGGER = logs.logging.getLogger(__name__)
 
-def mount(vault_token: str):
+def mount(vault_token: str, vcrypt_mount:str):
     """
     Mount a VeraCrypt encrypted volume
     and set appropriate symlink.
     """
 
-    grail_backup_mountpoint = "/grail-disk"
 
     disk_password = hvault.get_secret(
         vault_token,
@@ -26,8 +25,8 @@ def mount(vault_token: str):
 
     LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK_DEVICE"))
 
-    if not os.path.isdir(grail_backup_mountpoint):
-        os.makedirs(grail_backup_mountpoint)
+    if not os.path.isdir(vcrypt_mount):
+        os.makedirs(vcrypt_mount)
 
     os.system("\
         echo '" + disk_password + "' | veracrypt \
@@ -38,10 +37,10 @@ def mount(vault_token: str):
             --pim=0 \
             --non-interactive \
             --protect-hidden=no " + \
-            os.environ.get("BACKUP_DISK_DEVICE") + " " + grail_backup_mountpoint
+            os.environ.get("BACKUP_DISK_DEVICE") + " " + vcrypt_mount
     )
 
-def unmount():
+def unmount(vcrypt_mount: str):
     """
     Unmount a VeraCrypt encrypted volume
     and set appropriate symlink.
@@ -51,5 +50,6 @@ def unmount():
 
     os.system("\
         veracrypt \
-            --unmount"
+            --unmount " + \
+            vcrypt_mount
     )

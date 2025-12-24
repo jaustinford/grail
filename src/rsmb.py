@@ -6,52 +6,51 @@ layer.
 
 import os
 
+import logs
 import hvault
 
-def mount(vault_token: str):
+LOGGER = logs.logging.getLogger(__name__)
+
+SMB_HOST = "192.168.20.5"
+SMB_NAME = "xcalibr-root"
+SMB_PATH = "root_rw"
+SMB_OPTS = "uid=0,gid=32600,dir_mode=0770,file_mode=0770,seal,vers=3.1.1"
+
+def mount(vault_token: str, rsmb_mount: str):
     """
     Use token to access Samba credentials
     and create a non-persisted mount to
     authorized shares.
     """
 
-    smb_host = "192.168.20.5"
-    smb_name = "xcalibr-root"
-    smb_user = "arthur"
-    smb_auth = "root_rw"
-    smb_opts = "uid=0,gid=32600,dir_mode=0770,file_mode=0770,seal,vers=3.1.1"
+    if not os.path.isdir(rsmb_mount):
+        os.makedirs(rsmb_mount)
 
-    if os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-dst":
-        mount_dir = "/grail-src"
-
-    elif os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-src":
-        mount_dir = "/grail-dst"
-
-    if not os.path.isdir(mount_dir):
-        os.makedirs(mount_dir)
-
-    smb_pass = hvault.get_secret(
+    SMB_USER = hvault.get_secret(
         vault_token,
-        "users/raid_vol/" + smb_auth
-    )[smb_auth.upper()]
+        "users/raid_vol/" + SMB_PATH
+    )["USERNAME"]
+
+    SMB_PASS = hvault.get_secret(
+        vault_token,
+        "users/raid_vol/" + SMB_PATH
+    )["PASSWORD"]
+
+    LOGGER.info("Attempting to mount : %s", SMB_NAME)
 
     os.system(
         "mount \
             --type cifs \
-            //" + smb_host + "/" + smb_name + " " + mount_dir + " \
-            --options 'username=" + smb_user + ",password=" + smb_pass + "," + smb_opts + "'"
+            //" + SMB_HOST + "/" + SMB_NAME + " " + rsmb_mount + " \
+            --options 'username=" + SMB_USER + ",password=" + SMB_PASS + "," + SMB_OPTS + "'"
     )
 
-def unmount():
+def unmount(rsmb_mount: str):
     """
     Unmount temp mount location once
     all SMB tasks have completed.
     """
 
-    if os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-dst":
-        mount_dir = "/grail-src"
+    LOGGER.info("Attempting to unmount : %s", SMB_NAME)
 
-    elif os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-src":
-        mount_dir = "/grail-dst"
-
-    os.system("umount " + mount_dir)
+    os.system("umount " + rsmb_mount)
