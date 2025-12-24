@@ -7,21 +7,15 @@ the filesystem.
 import os
 
 import logs
-import hvault
+import infra.vsecrets
 
 LOGGER = logs.logging.getLogger(__name__)
 
-def mount(vault_token: str, vcrypt_mount:str):
+def mount(vcrypt_mount:str):
     """
     Mount a VeraCrypt encrypted volume
     and set appropriate symlink.
     """
-
-
-    disk_password = hvault.get_secret(
-        vault_token,
-        "disks/raid_vol/backups"
-    )[os.environ.get("BACKUP_DISK_NAME")]
 
     LOGGER.info("Attempting to mount : %s", os.environ.get("BACKUP_DISK_DEVICE"))
 
@@ -29,7 +23,7 @@ def mount(vault_token: str, vcrypt_mount:str):
         os.makedirs(vcrypt_mount)
 
     os.system("\
-        echo '" + disk_password + "' | veracrypt \
+        echo '" + infra.vsecrets.DISK_PASSWORD + "' | veracrypt \
             --text \
             --mount-options=nokernelcrypto \
             --stdin \

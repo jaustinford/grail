@@ -7,34 +7,26 @@ layer.
 import os
 
 import logs
-import hvault
+import infra.vsecrets
 
 LOGGER = logs.logging.getLogger(__name__)
 
 SMB_HOST = "192.168.20.5"
 SMB_NAME = "xcalibr-root"
-SMB_PATH = "root_rw"
 SMB_OPTS = "uid=0,gid=32600,dir_mode=0770,file_mode=0770,seal,vers=3.1.1"
 
-def mount(vault_token: str, rsmb_mount: str):
+def mount(rsmb_mount: str):
     """
     Use token to access Samba credentials
     and create a non-persisted mount to
     authorized shares.
     """
 
+    smb_user = infra.vsecrets.ROOT_RW_USER
+    smb_pass = infra.vsecrets.ROOT_RW_PASS
+
     if not os.path.isdir(rsmb_mount):
         os.makedirs(rsmb_mount)
-
-    smb_user = hvault.get_secret(
-        vault_token,
-        "users/raid_vol/" + SMB_PATH
-    )["USERNAME"]
-
-    smb_pass = hvault.get_secret(
-        vault_token,
-        "users/raid_vol/" + SMB_PATH
-    )["PASSWORD"]
 
     LOGGER.info("Attempting to mount : %s", SMB_NAME)
 
