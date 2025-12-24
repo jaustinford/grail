@@ -14,5 +14,5 @@ ROOT_RW      = infra.hvault.get_secret(VAULT_TOKEN, "users/raid_vol/root_rw")
 ROOT_RW_USER = ROOT_RW["USERNAME"]
 ROOT_RW_PASS = ROOT_RW["PASSWORD"]
 
-DISK_PASSWORD = \
-    infra.hvault.get_secret(VAULT_TOKEN, "disks/raid_vol/backups")[os.environ.get("BACKUP_DISK_NAME")]
+DISK_SECRET   = infra.hvault.get_secret(VAULT_TOKEN, "disks/raid_vol/backups")
+DISK_PASSWORD = DISK_SECRET[os.environ.get("BACKUP_DISK_NAME")]
