@@ -4,15 +4,10 @@ which can be used by the rest of the
 project.
 """
 
-import os
-
 import infra.hvault
 
 VAULT_TOKEN = infra.hvault.approle_login("grail")
 
-ROOT_RW      = infra.hvault.get_secret(VAULT_TOKEN, "users/raid_vol/root_rw")
-ROOT_RW_USER = ROOT_RW["USERNAME"]
+ROOT_RW      = infra.hvault.get_secret(VAULT_TOKEN, "users/raid/root_rw")
+ROOT_RW_USER = "arthur"
 ROOT_RW_PASS = ROOT_RW["PASSWORD"]
-
-DISK_SECRET   = infra.hvault.get_secret(VAULT_TOKEN, "disks/raid_vol/backups")
-DISK_PASSWORD = DISK_SECRET[os.environ.get("BACKUP_DISK_NAME")]

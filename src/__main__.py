@@ -8,7 +8,6 @@ import traceback
 
 import logs
 import gbackup
-import infra.vcrypt
 import infra.rsmb
 
 LOGGER = logs.logging.getLogger(__name__)
@@ -23,12 +22,8 @@ def main():
         rsmb_mount = gbackup.get_rsmb_mount()
         infra.rsmb.mount(rsmb_mount)
 
-    vcrypt_mount = "/grail-disk"
-    infra.vcrypt.mount(vcrypt_mount)
-
     try:
         gbackup.iterate_objects()
-        infra.vcrypt.unmount(vcrypt_mount)
 
         if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
             infra.rsmb.unmount(rsmb_mount)
@@ -36,8 +31,6 @@ def main():
     except Exception as broad_exception: # pylint: disable=broad-exception-caught
         LOGGER.error(broad_exception)
         traceback.print_exc()
-
-        infra.vcrypt.unmount(vcrypt_mount)
 
         if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
             infra.rsmb.unmount(rsmb_mount)
