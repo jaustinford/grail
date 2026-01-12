@@ -43,6 +43,7 @@ def unmount(rsmb_mount: str):
     all SMB tasks have completed.
     """
 
-    LOGGER.info("Attempting to unmount : %s", SMB_NAME)
+    if os.path.ismount(rsmb_mount):
+        LOGGER.info("Attempting to unmount : %s", SMB_NAME)
 
-    os.system("umount " + rsmb_mount)
+        os.system("umount " + rsmb_mount)

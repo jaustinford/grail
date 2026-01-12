@@ -20,6 +20,7 @@ def main():
 
     if os.environ.get("BACKUP_OBJECT").startswith("raidvol"):
         rsmb_mount = gbackup.get_rsmb_mount()
+
         infra.rsmb.mount(rsmb_mount)
 
     try:
