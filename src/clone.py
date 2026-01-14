@@ -28,7 +28,7 @@ def diff_file(src_file: str, dst_file: str, dst_relative: str, should_copy: bool
 
     if should_compare:
         if not filecmp.cmp(src_file, dst_file):
-            LOGGER.info("Updating checksum of file : %s", dst_relative)
+            LOGGER.info("Different checksum, updating file : %s", dst_relative)
             should_copy = True
 
         else:
@@ -36,7 +36,7 @@ def diff_file(src_file: str, dst_file: str, dst_relative: str, should_copy: bool
 
     else:
         if os.path.getsize(src_file) != os.path.getsize(dst_file):
-            LOGGER.info("Updating size of file : %s", dst_relative)
+            LOGGER.info("Different size, updating file : %s", dst_relative)
             should_copy = True
 
         else:
