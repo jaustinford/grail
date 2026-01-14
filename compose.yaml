@@ -2,15 +2,15 @@
 services:
 
   ############################################################
-  # backup_raidvol
+  # backup_raid
   ############################################################
 
-  backup_raidvol:
+  backup_raid:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
 
     profiles:
-      - backup-raidvol
+      - backup-raid
 
     environment:
       - TZ=America/Denver
@@ -37,15 +37,15 @@ services:
         max-file: '10'
 
   ############################################################
-  # restore_raidvol
+  # restore_raid
   ############################################################
 
-  restore_raidvol:
+  restore_raid:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
 
     profiles:
-      - restore-raidvol
+      - restore-raid
 
     environment:
       - TZ=America/Denver
@@ -72,19 +72,19 @@ services:
         max-file: '10'
 
   ############################################################
-  # backup_appvol
+  # backup_app
   ############################################################
 
-  backup_appvol:
+  backup_app:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
 
     profiles:
-      - backup-appvol
+      - backup-app
 
     environment:
       - TZ=America/Denver
-      - BACKUP_OBJECT=appvol
+      - BACKUP_OBJECT=app
       - BACKUP_DISK=${BACKUP_DISK}1
       - DISK_PASSWORD=${DISK_PASSWORD}
       - DISK_MOUNTPOINT=/grail-dst
@@ -107,19 +107,19 @@ services:
         max-file: '10'
 
   ############################################################
-  # restore_appvol
+  # restore_app
   ############################################################
 
-  restore_appvol:
+  restore_app:
     image: docker-hosted.proxy-int.pendragonlab.com/elise/grail:main
     entrypoint: python src
 
     profiles:
-      - restore-appvol
+      - restore-app
 
     environment:
       - TZ=America/Denver
-      - BACKUP_OBJECT=appvol
+      - BACKUP_OBJECT=app
       - BACKUP_DISK=${BACKUP_DISK}1
       - DISK_PASSWORD=${DISK_PASSWORD}
       - DISK_MOUNTPOINT=/grail-src
@@ -146,18 +146,18 @@ services:
 ###########################################################
 
 volumes:
-  raidvol_root_share:
+  raid_root_share:
     driver_opts:
       type: cifs
       o: "\
-        username=${RAIDVOL_ROOT_SHARE_USERNAME},\
-        password=${RAIDVOL_ROOT_SHARE_PASSWORD},\
-        uid=${RAIDVOL_ROOT_SHARE_UID},\
-        gid=${RAIDVOL_ROOT_SHARE_GID},\
+        username=${RAID_ROOT_SHARE_USERNAME},\
+        password=${RAID_ROOT_SHARE_PASSWORD},\
+        uid=${RAID_ROOT_SHARE_UID},\
+        gid=${RAID_ROOT_SHARE_GID},\
         dir_mode=0770,\
         file_mode=0770,\
         iocharset=utf8"
-      device: //${RAIDVOL_ROOT_SHARE_HOST}/${RAIDVOL_ROOT_SHARE_NAME}
+      device: //${RAID_ROOT_SHARE_HOST}/${RAID_ROOT_SHARE_NAME}
 
 networks:
   grail:
