@@ -32,7 +32,7 @@
 
     objects:
 
-      - name: raidvol-1
+      - name: raid-1
         targets:
           - black
           - blue
@@ -41,11 +41,31 @@
           - red/tv-deutsch
           - red/tv-espanol
           - red/tv-private
+          - red/tv-documentaries/Ag*
+          - red/tv-documentaries/Am*
+          - red/tv-documentaries/Anc*
+          - red/tv-documentaries/Anthony Bourdain No Reservations
           - white
 
-      - name: raidvol-2
+      - name: raid-2
         targets:
-          - red/tv-documentaries
+          - red/tv-documentaries/Anthony Bourdain Parts Unknown
+          - red/tv-documentaries/Ar*
+          - red/tv-documentaries/B*
+          - red/tv-documentaries/C*
+          - red/tv-documentaries/D*
+          - red/tv-documentaries/G*
+          - red/tv-documentaries/H*
+          - red/tv-documentaries/I*
+          - red/tv-documentaries/L*
+          - red/tv-documentaries/M*
+          - red/tv-documentaries/P*
+          - red/tv-documentaries/Q*
+          - red/tv-documentaries/R*
+          - red/tv-documentaries/S*
+          - red/tv-documentaries/T*
+          - red/tv-documentaries/U*
+          - red/tv-documentaries/W*
           - red/tv-reality
           - red/tv/1*
           - red/tv/2*
@@ -62,12 +82,10 @@
           - red/tv/I*
           - red/tv/J*
           - red/tv/K*
-          - red/tv/La*
-          - red/tv/Lo*
+          - red/tv/L*
 
-      - name: raidvol-3
+      - name: raid-3
         targets:
-          - red/tv/Lu*
           - red/tv/M*
           - red/tv/N*
           - red/tv/O*
@@ -81,7 +99,7 @@
           - red/tv/X*
           - red/tv/Y*
 
-      - name: appvol
+      - name: app
         targets:
           - deluge
           - elasticsearch
