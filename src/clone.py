@@ -78,7 +78,7 @@ def manage_dir(backup_direction: str, dst_root: str, src_dir: str, dst_dir: str)
 
     elif backup_direction == "reverse":
         if not os.path.isdir(dst_dir):
-            LOGGER.info("Removing dir : %s", dst_relative)
+            LOGGER.info("Removing dir : %s", re.sub("0;94m", "0;31m", dst_relative))
             shutil.rmtree(src_dir)
 
         else:
@@ -129,7 +129,7 @@ def manage_file(backup_direction: str, dst_root: str, src_file: str, dst_file: s
 
     elif backup_direction == "reverse":
         if not os.path.isfile(dst_file):
-            LOGGER.info("Removing file : %s", dst_relative)
+            LOGGER.info("Removing file : %s", re.sub("0;94m", "0;31m", dst_relative))
             os.remove(src_file)
 
         else:
