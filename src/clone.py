@@ -51,10 +51,10 @@ def manage_dir(backup_direction: str, dst_root: str, src_dir: str, dst_dir: str)
     """
 
     if backup_direction == "forward":
-        direction_colored = "\033[" + "0;94m" + backup_direction + "\033[" + "0;0m"
+        direction_colored = "\033[" + "0;92m" + backup_direction + "\033[" + "0;0m"
 
     elif backup_direction == "reverse":
-        direction_colored = "\033[" + "0;91m" + backup_direction + "\033[" + "0;0m"
+        direction_colored = "\033[" + "0;94m" + backup_direction + "\033[" + "0;0m"
 
     dst_relative = re.sub(dst_root, direction_colored + " - ", dst_dir)
 
@@ -93,10 +93,10 @@ def manage_file(backup_direction: str, dst_root: str, src_file: str, dst_file: s
     should_copy = False
 
     if backup_direction == "forward":
-        direction_colored = "\033[" + "0;94m" + backup_direction + "\033[" + "0;0m"
+        direction_colored = "\033[" + "0;92m" + backup_direction + "\033[" + "0;0m"
 
     elif backup_direction == "reverse":
-        direction_colored = "\033[" + "0;91m" + backup_direction + "\033[" + "0;0m"
+        direction_colored = "\033[" + "0;94m" + backup_direction + "\033[" + "0;0m"
 
     dst_relative = re.sub(dst_root, direction_colored + " - ", dst_file)
 
