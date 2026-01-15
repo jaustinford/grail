@@ -7,7 +7,10 @@ authentication method.
 import json
 import hvac
 
-VAULT_URL = "http://192.168.40.1:32524"
+VAULT_SCHEME = "http"
+VAULT_HOST   = "192.168.40.1"
+VAULT_PORT   = "32524"
+VAULT_URL    = VAULT_SCHEME + "://" + VAULT_HOST + ":" + VAULT_PORT
 
 def read_approle(approle_file: str):
     """
