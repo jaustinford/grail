@@ -7,13 +7,6 @@ RUN \
         pyyaml \
         hvac
 
-RUN \
-    apt update -y ; \
-    wget \
-        --output-document /tmp/veracrypt.deb \
-        https://launchpad.net/veracrypt/trunk/1.26.24/+download/veracrypt-console-1.26.24-Debian-12-$TARGETARCH.deb ; \
-    apt install -y /tmp/veracrypt.deb
-
 WORKDIR /grail
 
 COPY src/ ./src/
