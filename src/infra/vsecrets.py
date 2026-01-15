@@ -27,7 +27,7 @@ def vault_active(vault_host: str, vault_port: str):
     vault_socket.close()
 
     if vault_result == 0:
-       vault_alive = True
+        vault_alive = True
 
     return vault_alive
 
