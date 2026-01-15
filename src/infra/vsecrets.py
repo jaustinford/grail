@@ -20,7 +20,7 @@ def vault_active(vault_host: str, vault_port: str):
     vault_result = vault_socket.connect_ex(
         (
             vault_host,
-            vault_port
+            int(vault_port)
         )
     )
 
