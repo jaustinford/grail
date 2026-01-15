@@ -8,7 +8,6 @@ import traceback
 
 import logs
 import gbackup
-import infra.rsmb
 
 LOGGER = logs.logging.getLogger(__name__)
 
@@ -19,6 +18,8 @@ def main():
     """
 
     if os.environ.get("BACKUP_OBJECT").startswith("raid"):
+        import infra.rsmb
+
         rsmb_mount = gbackup.get_rsmb_mount()
 
         infra.rsmb.mount(rsmb_mount)
