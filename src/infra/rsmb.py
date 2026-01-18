@@ -5,6 +5,7 @@ layer.
 """
 
 import os
+import subprocess
 
 import logs
 import infra.vsecrets
@@ -30,11 +31,21 @@ def mount(rsmb_mount: str):
 
     LOGGER.info("Attempting to mount : %s", SMB_NAME)
 
-    os.system(
-        "mount \
-            --type cifs \
-            //" + SMB_HOST + "/" + SMB_NAME + " " + rsmb_mount + " \
-            --options 'username=" + smb_user + ",password=" + smb_pass + "," + SMB_OPTS + "'"
+    subprocess.run(
+        [
+            "mount",
+            "--type",
+            "cifs",
+            "//" + SMB_HOST + "/" + SMB_NAME,
+            rsmb_mount,
+            "--options",
+            "username=" + smb_user + ",password=" + smb_pass + "," + SMB_OPTS
+
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=5
     )
 
 def unmount(rsmb_mount: str):
