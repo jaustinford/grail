@@ -14,7 +14,7 @@ LOGGER = logs.logging.getLogger(__name__)
 
 SMB_HOST = "192.168.20.5"
 SMB_NAME = "xcalibr-root"
-SMB_OPTS = "uid=32628,gid=32628,dir_mode=0700,file_mode=0600,seal"
+SMB_OPTS = "uid=32628,gid=32628,dir_mode=0700,file_mode=0600,vers=3.11,seal"
 
 def mount(rsmb_mount: str):
     """
