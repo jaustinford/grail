@@ -26,6 +26,12 @@ def mount(rsmb_mount: str):
     smb_user = infra.vsecrets.ROOT_RW_USER
     smb_pass = infra.vsecrets.ROOT_RW_PASS
 
+    with open("/tmp/.smbcredentials", "w", encoding="utf-8") as creds_opened:
+        creds_opened.write(
+            "username=" + smb_user + "\n" + \
+            "password=" + smb_pass + "\n"
+        )
+
     if not os.path.isdir(rsmb_mount):
         os.makedirs(rsmb_mount)
 
@@ -39,8 +45,7 @@ def mount(rsmb_mount: str):
             "//" + SMB_HOST + "/" + SMB_NAME,
             rsmb_mount,
             "--options",
-            "username=" + smb_user + ",password=" + smb_pass + "," + SMB_OPTS
-
+            "credentials=/tmp/.smbcredentials," + SMB_OPTS
         ],
         capture_output=True,
         text=True,
@@ -58,3 +63,4 @@ def unmount(rsmb_mount: str):
         LOGGER.info("Attempting to unmount : %s", SMB_NAME)
 
         os.system("umount " + rsmb_mount)
+        os.remove("/tmp/.smbcredentials")
