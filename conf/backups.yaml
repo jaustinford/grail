@@ -55,6 +55,9 @@
           - red/movies/H*
           - red/movies/I*
           - red/movies/J*
+
+      - name: raid-2
+        targets:
           - red/movies/K*
           - red/movies/L*
           - red/movies/M*
@@ -64,9 +67,6 @@
           - red/movies/Q*
           - red/movies/R*
           - red/movies/S*
-
-      - name: raid-2
-        targets:
           - red/movies/T*
           - red/movies/U*
           - red/movies/V*
@@ -80,14 +80,14 @@
           - red/tv/9*
           - red/tv/A*
           - red/tv/B*
+
+      - name: raid-3
+        targets:
           - red/tv/C*
           - red/tv/D*
           - red/tv/E*
           - red/tv/F*
           - red/tv/G*
-
-      - name: raid-3
-        targets:
           - red/tv/H*
           - red/tv/I*
           - red/tv/J*
@@ -99,10 +99,10 @@
           - red/tv/P*
           - red/tv/Q*
           - red/tv/R*
-          - red/tv/S*
 
       - name: raid-4
         targets:
+          - red/tv/S*
           - red/tv/T*
           - red/tv/V*
           - red/tv/W*
