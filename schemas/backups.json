@@ -1,0 +1,51 @@
+{
+  "title": "grail backups",
+  "description": "define backup configuration for grail targets",
+  "properties": {
+    "backups": {
+      "type": "object",
+      "description": "parent object",
+      "properties": {
+        "non_checksum_exts": {
+          "type": "array",
+          "description": "list of exts to not perform checksum against and use instead simple size comparison.",
+          "items": {
+            "type": "string",
+            "description": "file extension"
+          }
+        },
+        "objects": {
+          "type": "array",
+          "description": "list of backup objects",
+          "items": {
+            "type": "object",
+            "description": "object item",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "name of object",
+                "pattern": "^(raid-[1-4]|app)$"
+              },
+              "targets": {
+                "type": "array",
+                "description": "targets within object",
+                "items": {
+                  "type": "string",
+                  "description": "folder path of target"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "targets"
+            ]
+          }
+        }
+      },
+      "required": [
+        "non_checksum_exts",
+        "objects"
+      ]
+    }
+  }
+}
