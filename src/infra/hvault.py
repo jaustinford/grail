@@ -8,7 +8,9 @@ import os
 import json
 import hvac
 
-VAULT_URL = "http://" + os.environ.get("VAULT_ENDPOINT")
+VAULT_URL  = "http://" + os.environ.get("VAULT_ENDPOINT")
+VAULT_HOST = VAULT_URL.split(":")[0]
+VAULT_PORT = VAULT_URL.split(":")[1]
 
 def read_approle(approle_file: str):
     """
