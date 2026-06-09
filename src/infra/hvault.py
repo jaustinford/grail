@@ -4,13 +4,11 @@ authorized secrets using the AppRole
 authentication method.
 """
 
+import os
 import json
 import hvac
 
-VAULT_SCHEME = "http"
-VAULT_HOST   = "192.168.40.1"
-VAULT_PORT   = "32524"
-VAULT_URL    = VAULT_SCHEME + "://" + VAULT_HOST + ":" + VAULT_PORT
+VAULT_URL = "http://" + os.environ.get("VAULT_ENDPOINT")
 
 def read_approle(approle_file: str):
     """
