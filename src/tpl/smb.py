@@ -21,7 +21,7 @@ def mount(smb_mount: str):
 
     vault_token = tpl.vault.approle_login(constants.SMB_APPROLE)
 
-    smb_auth = tpl.vault.hvault.get_secret(
+    smb_auth = tpl.vault.get_secret(
         vault_token,
         "users/raid/" + constants.SMB_VAULT_PATH
     )
