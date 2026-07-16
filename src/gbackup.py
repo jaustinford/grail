@@ -6,11 +6,24 @@ iterated targets.
 import os
 
 import constants
-import logs
 import resolve
 import clone
 
-LOGGER = logs.logging.getLogger(__name__)
+MAIN_LOG = constants.logging.getLogger(__name__)
+
+def get_smb_mount():
+    """
+    Select SMB mountpoint based on
+    value for 'BACKUP_DISK_MOUNTPOINT'.
+    """
+
+    if os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-dst":
+        smb_mount = "/grail-src"
+
+    elif os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-src":
+        smb_mount = "/grail-dst"
+
+    return smb_mount
 
 def process_backup(backup_direction: str, backup_target: str):
     """
@@ -76,7 +89,7 @@ def iterate_objects():
 
     for backup_object in constants.CONFIG_OBJECTS:
         if backup_object["name"] == os.environ.get("BACKUP_OBJECT"):
-            LOGGER.info("Processing backup : %s", backup_object["name"])
+            MAIN_LOG.info("Processing backup : %s", backup_object["name"])
 
             backup_targets = backup_object["targets"]
             break
@@ -84,17 +97,3 @@ def iterate_objects():
     for backup_target in backup_targets:
         process_backup("forward", backup_target)
         process_backup("reverse", backup_target)
-
-def get_rsmb_mount():
-    """
-    Select SMB mountpoint based on
-    value for 'BACKUP_DISK_MOUNTPOINT'.
-    """
-
-    if os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-dst":
-        rsmb_mount = "/grail-src"
-
-    elif os.environ.get("BACKUP_DISK_MOUNTPOINT") == "/grail-src":
-        rsmb_mount = "/grail-dst"
-
-    return rsmb_mount

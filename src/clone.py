@@ -9,9 +9,8 @@ import shutil
 import filecmp
 
 import constants
-import logs
 
-LOGGER = logs.logging.getLogger(__name__)
+MAIN_LOG = constants.logging.getLogger(__name__)
 
 def diff_file(src_file: str, dst_file: str, dst_relative: str, should_copy: bool):
     """
@@ -28,19 +27,19 @@ def diff_file(src_file: str, dst_file: str, dst_relative: str, should_copy: bool
 
     if should_compare:
         if not filecmp.cmp(src_file, dst_file):
-            LOGGER.info("Different checksum, updating file : %s", dst_relative)
+            MAIN_LOG.info("Different checksum, updating file : %s", dst_relative)
             should_copy = True
 
         else:
-            LOGGER.info("Confirmed checksum of file : %s", dst_relative)
+            MAIN_LOG.info("Confirmed checksum of file : %s", dst_relative)
 
     else:
         if os.path.getsize(src_file) != os.path.getsize(dst_file):
-            LOGGER.info("Different size, updating file : %s", dst_relative)
+            MAIN_LOG.info("Different size, updating file : %s", dst_relative)
             should_copy = True
 
         else:
-            LOGGER.info("Confirmed size of file : %s", dst_relative)
+            MAIN_LOG.info("Confirmed size of file : %s", dst_relative)
 
     return should_copy
 
@@ -60,13 +59,13 @@ def manage_dir(backup_direction: str, dst_root: str, src_dir: str, dst_dir: str)
 
     if backup_direction == "forward":
         if not os.path.isdir(dst_dir):
-            LOGGER.info("Creating dir : %s", dst_relative)
+            MAIN_LOG.info("Creating dir : %s", dst_relative)
 
             os.makedirs(dst_dir)
             shutil.copystat(src_dir, dst_dir, follow_symlinks=False)
 
         else:
-            LOGGER.info("Confirmed dir : %s", dst_relative)
+            MAIN_LOG.info("Confirmed dir : %s", dst_relative)
 
         src_dir_stat      = os.stat(src_dir)
         src_dir_stat_uid  = src_dir_stat.st_uid
@@ -78,11 +77,11 @@ def manage_dir(backup_direction: str, dst_root: str, src_dir: str, dst_dir: str)
 
     elif backup_direction == "reverse":
         if not os.path.isdir(dst_dir):
-            LOGGER.info("Removing dir : %s", re.sub("0;94m", "0;31m", dst_relative))
+            MAIN_LOG.info("Removing dir : %s", re.sub("0;94m", "0;31m", dst_relative))
             shutil.rmtree(src_dir)
 
         else:
-            LOGGER.info("Confirmed dir : %s", dst_relative)
+            MAIN_LOG.info("Confirmed dir : %s", dst_relative)
 
 def manage_file(backup_direction: str, dst_root: str, src_file: str, dst_file: str):
     """
@@ -102,7 +101,7 @@ def manage_file(backup_direction: str, dst_root: str, src_file: str, dst_file: s
 
     if backup_direction == "forward":
         if not os.path.exists(dst_file):
-            LOGGER.info("Creating file : %s", dst_relative)
+            MAIN_LOG.info("Creating file : %s", dst_relative)
             should_copy = True
 
         else:
@@ -129,8 +128,8 @@ def manage_file(backup_direction: str, dst_root: str, src_file: str, dst_file: s
 
     elif backup_direction == "reverse":
         if not os.path.isfile(dst_file):
-            LOGGER.info("Removing file : %s", re.sub("0;94m", "0;31m", dst_relative))
+            MAIN_LOG.info("Removing file : %s", re.sub("0;94m", "0;31m", dst_relative))
             os.remove(src_file)
 
         else:
-            LOGGER.info("Confirmed file : %s", dst_relative)
+            MAIN_LOG.info("Confirmed file : %s", dst_relative)

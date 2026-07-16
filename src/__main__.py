@@ -6,11 +6,11 @@ backup sources.
 import os
 import traceback
 
-import logs
+import constants
 import gbackup
-import infra.rsmb
+import tpl.smb
 
-LOGGER = logs.logging.getLogger(__name__)
+MAIN_LOG = constants.logging.getLogger(__name__)
 
 def main():
     """
@@ -19,22 +19,22 @@ def main():
     """
 
     if os.environ.get("BACKUP_OBJECT").startswith("raid"):
-        rsmb_mount = gbackup.get_rsmb_mount()
+        smb_mount = gbackup.get_smb_mount()
 
-        infra.rsmb.mount(rsmb_mount)
+        tpl.smb.mount(smb_mount)
 
     try:
         gbackup.iterate_objects()
 
         if os.environ.get("BACKUP_OBJECT").startswith("raid"):
-            infra.rsmb.unmount(rsmb_mount)
+            tpl.smb.unmount(smb_mount)
 
     except Exception as broad_exception: # pylint: disable=broad-exception-caught
-        LOGGER.error(broad_exception)
+        MAIN_LOG.error(broad_exception)
         traceback.print_exc()
 
         if os.environ.get("BACKUP_OBJECT").startswith("raid"):
-            infra.rsmb.unmount(rsmb_mount)
+            tpl.smb.unmount(smb_mount)
 
 if __name__ == "__main__":
     main()

@@ -1,19 +1,56 @@
 """
-Open config files and assign as
-project variable constants.
+Fully-qualified paths, parsed configurations
+and other global variables.
 """
 
 import os
+import logging
 import yaml
 
-FILE_PATH       = os.path.abspath(__file__)
-SRC_DIRNAME     = os.path.dirname(FILE_PATH)
-PROJECT_DIRNAME = os.path.dirname(SRC_DIRNAME)
-CONF_DIRNAME    = os.path.join(PROJECT_DIRNAME, "conf")
-BACKUPS_FILE    = os.path.join(CONF_DIRNAME, "backups.yaml")
+##################################################
+# paths
+##################################################
 
-with open(BACKUPS_FILE, "r", encoding="utf-8") as backups_opened:
-    backups_json = yaml.safe_load(backups_opened)["backups"]
+CONSTANTS_FILE = os.path.abspath(__file__)
+SRC_DIR        = os.path.dirname(CONSTANTS_FILE)
+PROJECT_DIR    = os.path.dirname(SRC_DIR)
 
-CONFIG_NON_CHECKSUM_EXTS = backups_json["non_checksum_exts"]
-CONFIG_OBJECTS           = backups_json["objects"]
+CONF_DIR          = os.path.join(PROJECT_DIR, "conf")
+CONF_BACKUPS_FILE = os.path.join(CONF_DIR, "backups.yaml")
+
+##################################################
+# read configurations
+##################################################
+
+with open(CONF_BACKUPS_FILE, "r", encoding="utf-8") as conf_backups_opened:
+    CONF_BACKUPS_YAML = yaml.safe_load(conf_backups_opened)["backups"]
+
+##################################################
+# logging
+##################################################
+
+LOGGING_FORMAT_BANNER = CONF_BACKUPS_YAML["logging"]["format"]["banner"]
+LOGGING_FORMAT_DATE   = CONF_BACKUPS_YAML["logging"]["format"]["date"]
+LOGGING_FORMAT_TIME   = CONF_BACKUPS_YAML["logging"]["format"]["time"]
+
+logging.basicConfig(
+    format=LOGGING_FORMAT_BANNER,
+    datefmt=LOGGING_FORMAT_DATE + " " + LOGGING_FORMAT_TIME + " %Z",
+    level=logging.INFO
+)
+
+##################################################
+# general
+##################################################
+
+CONFIG_NON_CHECKSUM_EXTS = CONF_BACKUPS_YAML["non_checksum_exts"]
+CONFIG_OBJECTS           = CONF_BACKUPS_YAML["objects"]
+
+VAULT_ENDPOINT = os.environ.get("VAULT_ENDPOINT")
+
+SMB_SHARE_HOST = os.environ.get("SMB_SHARE_HOST")
+SMB_SHARE_NAME = os.environ.get("SMB_SHARE_NAME")
+SMB_SHARE_UID  = os.environ.get("SMB_SHARE_UID")
+SMB_SHARE_GID  = os.environ.get("SMB_SHARE_GID")
+SMB_APPROLE    = os.environ.get("SMB_APPROLE")
+SMB_VAULT_PATH = os.environ.get("SMB_VAULT_PATH")

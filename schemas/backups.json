@@ -1,6 +1,6 @@
 {
   "title": "grail backups",
-  "description": "define backup configuration for grail targets",
+  "description": "main configuration",
   "properties": {
     "backups": {
       "type": "object",
@@ -40,11 +40,44 @@
               "targets"
             ]
           }
+        },
+        "logging": {
+          "type": "object",
+          "description": "configure project logging",
+          "properties": {
+            "format": {
+              "type": "object",
+              "description": "log formatting timestamp",
+              "properties": {
+                "banner": {
+                  "type": "string",
+                  "description": "banner format for logs"
+                },
+                "date": {
+                  "type": "string",
+                  "description": "log formatting timestamp date element",
+                  "pattern": "^%Y(-|_|:)%m(-|_|:)%d$"
+                },
+                "time": {
+                  "type": "string",
+                  "description": "log formatting timestamp time element",
+                  "pattern": "^%H(-|_|:)%M(-|_|:)%S$"
+                }
+              },
+              "required": [
+                "banner",
+                "date",
+                "time"
+              ]
+            }
+          },
+          "required": ["format"]
         }
       },
       "required": [
         "non_checksum_exts",
-        "objects"
+        "objects",
+        "logging"
       ]
     }
   }
